@@ -3,8 +3,12 @@ package edu.ncsu.csc316.social.manager;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 
+import edu.ncsu.csc316.dsa.graph.Graph;
+import edu.ncsu.csc316.dsa.graph.Graph.Vertex;
 import edu.ncsu.csc316.dsa.list.List;
+import edu.ncsu.csc316.dsa.map.Map;
 import edu.ncsu.csc316.social.data.Friendship;
+import edu.ncsu.csc316.social.factory.DSAFactory;
 import edu.ncsu.csc316.social.io.TextFileIO;
 
 /**
@@ -17,16 +21,43 @@ import edu.ncsu.csc316.social.io.TextFileIO;
  *
  */
 public class SocialNetworkManager {
+	
+	private Graph<String, Integer> friendGraph;
 
 	/**
-	 * Initializes the SocialNetworkManager
+	 * Initializes the SocialNetworkManager and builds the graph
 	 * 
 	 * @param pathToFriendshipFile the path to the input friendship information
 	 * @throws FileNotFoundException if the input file is not found
 	 * @throws ParseException        if the input file contains an unparsable date
 	 */
 	public SocialNetworkManager(String pathToFriendshipFile) throws FileNotFoundException, ParseException {
-		List<Friendship> friendList = TextFileIO.readFriendships( pathToFriendshipFile );
+		buildGraph( TextFileIO.readFriendships( pathToFriendshipFile ) );
+	}
+	
+	private Graph<String, Integer> buildGraph( List<Friendship> friendList ) {
+		friendGraph = DSAFactory.getUndirectedGraph();
+		Map<String, Vertex<String>> vertexTable = DSAFactory.getMap();
+		for(int i = 0; i < friendList.size(); i++) {
+			Friendship x = friendList.get(i);
+			Vertex<String> v1;
+			Vertex<String> v2;
+			if( vertexTable.get(x.getEmail1()) == null) {
+				v1 = friendGraph.insertVertex( x.getEmail1() );
+				vertexTable.put(x.getEmail1(), v1);
+			} else {
+				v1 = vertexTable.get(x.getEmail1());
+			}
+			if( vertexTable.get(x.getEmail2()) == null) {
+				v2 = friendGraph.insertVertex( x.getEmail2() );
+				vertexTable.put(x.getEmail2(), v2);
+			} else {
+				v2 = vertexTable.get(x.getEmail2());
+			}
+			friendGraph.insertEdge(v1, v2, x.getWeight() );
+		}
+		
+		return friendGraph;
 	}
 
 	/**
