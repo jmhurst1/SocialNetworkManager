@@ -64,7 +64,6 @@ public class SocialNetworkManagerUI {
 		System.out.println();
 		System.out.println();
 
-		userInput = "";
 		if ( userInput.equals( "s" ) ) { //Friend Suggestions flow
 			System.out.println("Enter in email for suggestions");
 			userInput = sc.nextLine();

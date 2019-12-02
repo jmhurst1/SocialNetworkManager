@@ -4,9 +4,11 @@ import java.io.FileNotFoundException;
 import java.text.ParseException;
 
 import edu.ncsu.csc316.dsa.graph.Graph;
+import edu.ncsu.csc316.dsa.graph.Graph.Edge;
 import edu.ncsu.csc316.dsa.graph.Graph.Vertex;
 import edu.ncsu.csc316.dsa.list.List;
 import edu.ncsu.csc316.dsa.map.Map;
+import edu.ncsu.csc316.dsa.sorter.Sorter;
 import edu.ncsu.csc316.social.data.Friendship;
 import edu.ncsu.csc316.social.factory.DSAFactory;
 import edu.ncsu.csc316.social.io.TextFileIO;
@@ -32,7 +34,7 @@ public class SocialNetworkManager {
 	 * @throws ParseException        if the input file contains an unparsable date
 	 */
 	public SocialNetworkManager(String pathToFriendshipFile) throws FileNotFoundException, ParseException {
-		buildGraph( TextFileIO.readFriendships( pathToFriendshipFile ) );
+		friendGraph = buildGraph( TextFileIO.readFriendships( pathToFriendshipFile ) );
 	}
 	
 	private Graph<String, Integer> buildGraph( List<Friendship> friendList ) {
@@ -81,8 +83,39 @@ public class SocialNetworkManager {
 	 * @return a report of the friend suggestions for the provided email address
 	 */
 	public String getSuggestionReport(String email) {
-		//TODO: complete this method
-		return null;
+		Map<String, Integer> suggestedFriends = DSAFactory.getMap();
+	    Vertex<String> v = null;
+	    for ( Vertex<String> vert : friendGraph.vertices() ) //Find the vertex for the given email
+	        if ( vert.getElement().equals( email ) )
+	            v = vert;
+	    if (v == null) //Invalid email
+	       throw new IllegalArgumentException( email + " does not exist in the social network.");
+	    Iterable<Edge<Integer>> directFriends = friendGraph.outgoingEdges( v );
+	    Map<String, Integer> directFriendVertices = DSAFactory.getMap();
+	    for (Edge<Integer> friend : directFriends )
+	        directFriendVertices.put(friendGraph.opposite(v, friend).getElement(), 1);
+	    for ( Edge<Integer> friend : directFriends ) { //Go through friends
+	        Vertex<String> friendV = friendGraph.opposite(v, friend);
+	        Iterable<Edge<Integer>> friendFriends = friendGraph.outgoingEdges( friendV );
+	        for ( Edge<Integer> secondFriend : friendFriends ) //Go through friends of friend
+	            if ( !( v.equals( friendGraph.opposite(friendV, secondFriend) ) ||
+	                directFriendVertices.get( friendGraph.opposite(friendV, secondFriend ).getElement()) != null ||
+	                suggestedFriends.get( friendGraph.opposite(friendV, secondFriend).getElement()) != null ) )  //If the found vertex is a valid suggestion...
+	                suggestedFriends.put( friendGraph.opposite(friendV, secondFriend).getElement(), 1); //Add the valid suggestion to the list
+	    }
+	    Sorter< String > sorter = DSAFactory.getComparisonSorter();
+	    String sortedArray[] = new String[suggestedFriends.size()];
+	    int count = 0;
+	    for( String friendEmail : suggestedFriends ) {
+	    	sortedArray[count++] = friendEmail;
+	    }
+	    sorter.sort(sortedArray);
+	    StringBuilder output = new StringBuilder( "Friend Suggestions for " + email + " [\n" );
+	    for( int i = 0; i < count; i++ ) {
+	    	output.append(sortedArray[i] + "\n");
+	    }
+	    output.append("]");
+		return output.toString();
 	}
 
 	//TODO: add any additional private helper methods as needed
