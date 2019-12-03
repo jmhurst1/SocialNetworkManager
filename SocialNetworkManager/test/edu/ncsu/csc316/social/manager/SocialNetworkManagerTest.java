@@ -58,7 +58,13 @@ public class SocialNetworkManagerTest {
 		} catch (FileNotFoundException | ParseException e) {
 			fail();
 		}
-		assertNull( manager.getDegreesReport("jason@email.com", "shawnique@email.com") );
+		assertEquals( manager.getDegreesReport("jamie@email.com", "dustin@email.com"),
+				"3 degrees of separation between jamie@email.com and dustin@email.com [\n" + 
+				"       jamie@email.com\n" + 
+				"   --> jason@email.com\n" + 
+				"   --> shawnique@email.com\n" + 
+				"   --> dustin@email.com\n" +
+				"]");
 	}
 
 	/**

@@ -4,6 +4,7 @@ import java.io.FileNotFoundException;
 import java.text.ParseException;
 
 import edu.ncsu.csc316.dsa.graph.Graph;
+import edu.ncsu.csc316.dsa.graph.ShortestPathUtil;
 import edu.ncsu.csc316.dsa.graph.Graph.Edge;
 import edu.ncsu.csc316.dsa.graph.Graph.Vertex;
 import edu.ncsu.csc316.dsa.list.List;
@@ -24,7 +25,7 @@ import edu.ncsu.csc316.social.io.TextFileIO;
  */
 public class SocialNetworkManager {
 	
-	private Graph<String, Integer> friendGraph;
+	private Graph<String, Friendship> friendGraph;
 
 	/**
 	 * Initializes the SocialNetworkManager and builds the graph
@@ -37,7 +38,7 @@ public class SocialNetworkManager {
 		friendGraph = buildGraph( TextFileIO.readFriendships( pathToFriendshipFile ) );
 	}
 	
-	private Graph<String, Integer> buildGraph( List<Friendship> friendList ) {
+	private Graph<String, Friendship> buildGraph( List<Friendship> friendList ) {
 		friendGraph = DSAFactory.getUndirectedGraph();
 		Map<String, Vertex<String>> vertexTable = DSAFactory.getMap();
 		for(int i = 0; i < friendList.size(); i++) {
@@ -56,7 +57,7 @@ public class SocialNetworkManager {
 			} else {
 				v2 = vertexTable.get(x.getEmail2());
 			}
-			friendGraph.insertEdge(v1, v2, x.getWeight() );
+			friendGraph.insertEdge(v1, v2, x );
 		}
 		
 		return friendGraph;
@@ -72,7 +73,40 @@ public class SocialNetworkManager {
 	 *         email addresses
 	 */
 	public String getDegreesReport(String emailOne, String emailTwo) {
-		return null;
+		Vertex<String> v1 = null;
+		for ( Vertex<String> vert : friendGraph.vertices() ) //Find the vertex for email 1
+	        if ( vert.getElement().equals( emailOne ) )
+	            v1 = vert;
+	    if (v1 == null) //Invalid email
+	       return emailOne + " does not exist in the social network.";
+	    Vertex<String> v2 = null;
+		for ( Vertex<String> vert : friendGraph.vertices() ) //Find the vertex for email 2
+	        if ( vert.getElement().equals( emailTwo ) )
+	            v2 = vert;
+	    if (v2 == null) //Invalid email
+	       return emailOne + " does not exist in the social network.";
+	    List<String> list = DSAFactory.getIndexedList();
+	    Map<Vertex<String>, Integer> shortestPaths = ShortestPathUtil.dijkstra(this.friendGraph, v1);
+	    Map<Vertex<String>, Edge<Friendship>> shortestPathsEdges = ShortestPathUtil.shortestPathTree(this.friendGraph, v1, shortestPaths);
+	    Iterable<Map.Entry<Graph.Vertex<String>, Graph.Edge<Friendship>>> edges = shortestPathsEdges.entrySet();
+	    for (Map.Entry<Graph.Vertex<String>, Graph.Edge<Friendship>> e : edges) {
+	    	if (e.getKey().equals(v2)) {
+	    		list.addFirst(e.getKey().getElement());
+    			Vertex<String> temp = this.friendGraph.opposite(e.getKey(), e.getValue());
+	    		while (!temp.equals(v1)) {
+	    			list.addFirst(temp.getElement());
+	    			temp = this.friendGraph.opposite(temp, shortestPathsEdges.get(temp));
+	    		}
+	    	}
+	    }
+	    int degrees = shortestPaths.get(v2);
+	    StringBuilder output = new StringBuilder( degrees + " degrees of separation between " + emailOne + " and " + emailTwo + " [\n" );
+	    output.append("       " + emailOne + "\n");
+	    for( int i = 0; i < list.size(); i++ ) {
+	    	output.append("   --> " + list.get(i) + "\n");
+	    }
+	    output.append("]");
+		return output.toString();
 	}
 
 	/**
@@ -89,14 +123,14 @@ public class SocialNetworkManager {
 	            v = vert;
 	    if (v == null) //Invalid email
 	       return email + " does not exist in the social network.";
-	    Iterable<Edge<Integer>> directFriends = friendGraph.outgoingEdges( v );
+	    Iterable<Edge<Friendship>> directFriends = friendGraph.outgoingEdges( v );
 	    Map<String, Integer> directFriendVertices = DSAFactory.getMap();
-	    for (Edge<Integer> friend : directFriends )
+	    for (Edge<Friendship> friend : directFriends )
 	        directFriendVertices.put(friendGraph.opposite(v, friend).getElement(), 1);
-	    for ( Edge<Integer> friend : directFriends ) { //Go through friends
+	    for ( Edge<Friendship> friend : directFriends ) { //Go through friends
 	        Vertex<String> friendV = friendGraph.opposite(v, friend);
-	        Iterable<Edge<Integer>> friendFriends = friendGraph.outgoingEdges( friendV );
-	        for ( Edge<Integer> secondFriend : friendFriends ) //Go through friends of friend
+	        Iterable<Edge<Friendship>> friendFriends = friendGraph.outgoingEdges( friendV );
+	        for ( Edge<Friendship> secondFriend : friendFriends ) //Go through friends of friend
 	            if ( !( v.equals( friendGraph.opposite(friendV, secondFriend) ) ||
 	                directFriendVertices.get( friendGraph.opposite(friendV, secondFriend ).getElement()) != null ||
 	                suggestedFriends.get( friendGraph.opposite(friendV, secondFriend).getElement()) != null ) )  //If the found vertex is a valid suggestion...
