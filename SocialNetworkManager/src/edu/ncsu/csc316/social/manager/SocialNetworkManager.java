@@ -89,7 +89,7 @@ public class SocialNetworkManager {
 	        if ( vert.getElement().equals( email ) )
 	            v = vert;
 	    if (v == null) //Invalid email
-	       throw new IllegalArgumentException( email + " does not exist in the social network.");
+	       return email + " does not exist in the social network.";
 	    Iterable<Edge<Integer>> directFriends = friendGraph.outgoingEdges( v );
 	    Map<String, Integer> directFriendVertices = DSAFactory.getMap();
 	    for (Edge<Integer> friend : directFriends )
@@ -110,9 +110,11 @@ public class SocialNetworkManager {
 	    	sortedArray[count++] = friendEmail;
 	    }
 	    sorter.sort(sortedArray);
+	    if ( count == 0 )
+	    	return "No friend suggestions for " + email;
 	    StringBuilder output = new StringBuilder( "Friend Suggestions for " + email + " [\n" );
 	    for( int i = 0; i < count; i++ ) {
-	    	output.append(sortedArray[i] + "\n");
+	    	output.append("   " + sortedArray[i] + "\n");
 	    }
 	    output.append("]");
 		return output.toString();
