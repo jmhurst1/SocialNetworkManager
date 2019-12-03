@@ -48,7 +48,13 @@ public class SocialNetworkManagerTest {
 	 */
 	@Test
 	public void testGetDegreesReport() {
-		assertNull( null );
+		SocialNetworkManager manager = null;
+		try {
+			manager = new SocialNetworkManager(VALID_FILE_1);
+		} catch (FileNotFoundException | ParseException e) {
+			fail();
+		}
+		assertNull( manager.getDegreesReport("jason@email.com", "shawnique@email.com") );
 	}
 
 	/**
