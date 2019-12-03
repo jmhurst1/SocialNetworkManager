@@ -7,8 +7,8 @@ import edu.ncsu.csc316.dsa.graph.AdjacencyListGraph;
 import edu.ncsu.csc316.dsa.graph.Graph;
 import edu.ncsu.csc316.dsa.list.List;
 import edu.ncsu.csc316.dsa.list.SinglyLinkedList;
-import edu.ncsu.csc316.dsa.list.positional.PositionalLinkedList;
-import edu.ncsu.csc316.dsa.list.positional.PositionalList;
+//import edu.ncsu.csc316.dsa.list.positional.PositionalLinkedList;
+//import edu.ncsu.csc316.dsa.list.positional.PositionalList;
 //import edu.ncsu.csc316.dsa.list.positional.PositionalLinkedList;
 //import edu.ncsu.csc316.dsa.list.positional.PositionalList;
 import edu.ncsu.csc316.dsa.map.Map;
@@ -59,16 +59,16 @@ public class DSAFactory {
 		return getSinglyLinkedList();
 	}
 
-	/**
-	 * Returns a data structure that implements an positional list
-	 * 
-	 * @param <E>
-	 *            - the element type
-	 * @return a positional list
-	 */
-	public static <E> PositionalList<E> getPositionalList() {
-		return getPositionalLinkedList();
-	}
+//	/**
+//	 * Returns a data structure that implements an positional list
+//	 * 
+//	 * @param <E>
+//	 *            - the element type
+//	 * @return a positional list
+//	 */
+//	public static <E> PositionalList<E> getPositionalList() {
+//		return getPositionalLinkedList();
+//	}
 
 	/**
 	 * Returns a comparison based sorter
@@ -182,14 +182,14 @@ public class DSAFactory {
 		return new SinglyLinkedList<E>();
 	}
 
-	/**
-	 * Returns a positional linked list with a front pointer
-	 * 
-	 * @return a positional linked list with a front pointer
-	 */
-	private static <E> PositionalLinkedList<E> getPositionalLinkedList() {
-		return new PositionalLinkedList<E>();
-	}
+//	/**
+//	 * Returns a positional linked list with a front pointer
+//	 * 
+//	 * @return a positional linked list with a front pointer
+//	 */
+//	private static <E> PositionalLinkedList<E> getPositionalLinkedList() {
+//		return new PositionalLinkedList<E>();
+//	}
 
 	/**
 	 * Returns a mergesorter
