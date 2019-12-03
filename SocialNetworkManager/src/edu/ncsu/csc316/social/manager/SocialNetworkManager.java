@@ -74,7 +74,7 @@ public class SocialNetworkManager {
 	 */
 	public String getDegreesReport(String emailOne, String emailTwo) {
 		if (emailOne.equals(emailTwo)) {
-			return "You must enter two different email addresses";
+			return "You must enter two different email addresses.";
 		}
 		Vertex<String> v1 = null;
 		for ( Vertex<String> vert : friendGraph.vertices() ) //Find the vertex for email 1
@@ -104,7 +104,7 @@ public class SocialNetworkManager {
 	    }
 	    int degrees = shortestPaths.get(v2);
 	    if (degrees > 1000) {
-	    	return emailOne + " and " + emailTwo + " are not connected in the social network";
+	    	return emailOne + " and " + emailTwo + " are not connected in the social network.";
 	    }
 	    StringBuilder output = new StringBuilder( degrees + " degrees of separation between " + emailOne + " and " + emailTwo + " [\n" );
 	    output.append("       " + emailOne + "\n");
