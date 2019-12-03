@@ -72,7 +72,6 @@ public class SocialNetworkManager {
 	 *         email addresses
 	 */
 	public String getDegreesReport(String emailOne, String emailTwo) {
-		//TODO: complete this method
 		return null;
 	}
 
@@ -119,6 +118,4 @@ public class SocialNetworkManager {
 	    output.append("]");
 		return output.toString();
 	}
-
-	//TODO: add any additional private helper methods as needed
 }

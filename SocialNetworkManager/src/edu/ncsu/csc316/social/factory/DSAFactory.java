@@ -114,6 +114,8 @@ public class DSAFactory {
 	
 	/**
 	 * Returns a data structure that implements a Priority Queue
+	 * @param <K> type of key
+	 * @param <V> type of vertex
 	 * @return a priority queue
 	 */
 	public static <K extends Comparable<K>, V> PriorityQueue<K, V> getPriorityQueue() {
@@ -122,14 +124,17 @@ public class DSAFactory {
 
 	/**
 	 * Returns a data structure that implements an Adaptable Priority Queue
+	 * @param <K> type of key
+	 * @param <V> type of vertex
 	 * @return an adaptable priority queue
 	 */
-	public static <K extends Comparable<K> ,V> AdaptablePriorityQueue<K, V> getAdaptablePriorityQueue() {
+	public static <K extends Comparable<K>, V> AdaptablePriorityQueue<K, V> getAdaptablePriorityQueue() {
 		return new HeapAdaptablePriorityQueue<K, V>();
 	}
 	
 	/**
 	 * Returns a data structure that implements a Set
+	 * @param <E> type of element
 	 * @return a set
 	 */
 	public static <E> Set<E> getSet() {
@@ -138,6 +143,7 @@ public class DSAFactory {
 	
 	/**
 	 * Returns a data structure that implements a Disjoint Set
+	 * @param <E> type of element
 	 * @return a disjoint set
 	 */
 	public static <E> DisjointSetForest<E> getDisjointSet() {
@@ -146,6 +152,8 @@ public class DSAFactory {
 	
 	/**
 	 * Returns a data structure that implements an Undirected Graph
+	 * @param <V> type of vertex
+	 * @param <E> type of element
 	 * @return an undirected graph
 	 */
 	public static <V, E> Graph<V, E> getUndirectedGraph() {
@@ -154,6 +162,8 @@ public class DSAFactory {
 	
 	/**
 	 * Returns a data structure that implements a directed graph
+	 * @param <V> type of vertex
+	 * @param <E> type of element
 	 * @return a directed graph
 	 */
 	public static <V, E> Graph<V, E> getDirectedGraph() {
