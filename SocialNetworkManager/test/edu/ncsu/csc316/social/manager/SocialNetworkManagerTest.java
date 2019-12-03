@@ -10,6 +10,8 @@ import java.text.ParseException;
 
 import org.junit.Test;
 
+import edu.ncsu.csc316.social.factory.DSAFactory;
+
 /**
  * Tests SocialNetworkManager
  * @author Jason
@@ -21,12 +23,14 @@ public class SocialNetworkManagerTest {
 	private static final String VALID_FILE_2 = "input/sample2.csv";
 	private static final String INVALID_FILE = "input/imaginary.csv";
 
+	private static final DSAFactory FACTORY = new DSAFactory();
 	/**
 	 * Test method for {@link edu.ncsu.csc316.social.manager.SocialNetworkManager#SocialNetworkManager(java.lang.String)}.
 	 */
 	@Test
 	public void testSocialNetworkManager() {
 		SocialNetworkManager manager = null;
+		assertNotNull( FACTORY );
 		try {
 			manager = new SocialNetworkManager(VALID_FILE_1);
 		} catch (FileNotFoundException | ParseException e) {
