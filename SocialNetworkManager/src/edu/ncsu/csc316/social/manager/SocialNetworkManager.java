@@ -84,7 +84,7 @@ public class SocialNetworkManager {
 	        if ( vert.getElement().equals( emailTwo ) )
 	            v2 = vert;
 	    if (v2 == null) //Invalid email
-	       return emailOne + " does not exist in the social network.";
+	       return emailTwo + " does not exist in the social network.";
 	    List<String> list = DSAFactory.getIndexedList();
 	    Map<Vertex<String>, Integer> shortestPaths = ShortestPathUtil.dijkstra(this.friendGraph, v1);
 	    Map<Vertex<String>, Edge<Friendship>> shortestPathsEdges = ShortestPathUtil.shortestPathTree(this.friendGraph, v1, shortestPaths);
