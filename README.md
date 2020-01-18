@@ -3,8 +3,8 @@
 ## Purpose
 Uses algorithms to determine info from a graph network. <br />
 First a user enters in a input file, then the user can choose
-1. Suggestions to find friends of friends
-2. Find degrees of separtions between two given emails
+1. Suggestions to list friends of friends for a given email
+2. Find degrees of separtion between two given emails
 3. Quit the program
 
 ## Example file
