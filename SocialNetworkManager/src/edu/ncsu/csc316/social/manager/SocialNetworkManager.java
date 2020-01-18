@@ -20,7 +20,6 @@ import edu.ncsu.csc316.social.io.TextFileIO;
  * 
  * @author Dr. King
  * @author Jason Hurst
- * @author <YOUR NAME HERE>
  *
  */
 public class SocialNetworkManager {
@@ -41,8 +40,7 @@ public class SocialNetworkManager {
 	private Graph<String, Friendship> buildGraph( List<Friendship> friendList ) {
 		friendGraph = DSAFactory.getUndirectedGraph();
 		Map<String, Vertex<String>> vertexTable = DSAFactory.getMap();
-		for(int i = 0; i < friendList.size(); i++) {
-			Friendship x = friendList.get(i);
+		for(Friendship x : friendList) {
 			Vertex<String> v1;
 			Vertex<String> v2;
 			if( vertexTable.get(x.getEmail1()) == null) {
